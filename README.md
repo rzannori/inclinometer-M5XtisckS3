@@ -9,7 +9,8 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v25.5 — RZTools, versione di sviluppo corrente** (`RZTools_v25_5/RZTools_v25_5.ino`).
+> **v26 — RZTools, versione di sviluppo corrente** (`RZTools_v26/`: `RZTools_v26.ino` + `web_app.h` + `icon_png.h`).
+> Novità: **app per telefono via WiFi** (vedi [App per telefono](#app-per-telefono-v26)).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
 > Vedi [RZTools v25.x](#rztools-v25x).
@@ -27,6 +28,18 @@ LOGO → MENU ─┬─ Goniometro  : IMPOSTA R → MONTA → TARA → LIVE
 - **Menu**: DX ("Cambia") scorre, BLU ("ok") conferma
 - **Imposta R** (unica per entrambi i programmi): DX +1 / 2 click +10, BLU −1 / 2 click −10, **tieni DX = Avanti**, **tieni BLU = back (menu)**. Dalla v25.1 le due azioni "tieni" sono indicate dalle etichette delle frecce: "Avanti (tieni)" sotto la freccia DX e "back / tieni" in verticale accanto alla freccia BLU
 - **Goniometro**: identico alla v24.2 (vedi [Goniometro v24.x](#goniometro-v24x))
+
+### App per telefono (v26)
+
+Lo stick può creare una propria rete WiFi e servire una pagina web che fa da **secondo schermo e telecomando** sul telefono (stile grafico ripreso da RZ Ballast Archive). I tasti fisici continuano a funzionare.
+
+1. Sullo stick: **menu → "WiFi app"** (DX scorre fino alla voce, BLU conferma). Diventa "WiFi app: ON" e in basso compaiono rete e indirizzo. All'accensione il WiFi è sempre spento (risparmio batteria); si spegne con la stessa voce
+2. Sul telefono: collegati alla rete WiFi **RZTools** (password **rztools1**) e apri **http://192.168.4.1**
+3. Su iPhone: Safari → Condividi → **Aggiungi a Home** per averla come icona a schermo intero
+
+Il telefono mostra la schermata in corso con comandi adatti: R scritta col tastierino, pulsanti grandi (Avvia Tara, Fine, Risultato…), confronto DX con valori rossi/verdi, tabella dei risultati. Toccando il logo in alto si torna al menu (con conferma). Se la connessione cade compare un avviso con le istruzioni.
+
+Note: il WiFi aumenta il consumo (autonomia più breve); mentre è collegato allo stick l'iPhone non usa quella rete per internet. Rete e password si cambiano in testa allo sketch (`WIFI_SSID`, `WIFI_PASS`).
 
 ### Inclinometro (confronto escursioni)
 
@@ -316,9 +329,12 @@ Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come ric
 
 ```
 README.md
-RZTools_v25_5/
-  RZTools_v25_5.ino               versione corrente: menu RZTools con Goniometro e Inclinometro
+RZTools_v26/                      versione corrente
+  RZTools_v26.ino                 programma: menu RZTools con Goniometro, Inclinometro e WiFi app
+  web_app.h                       pagina web dell'app per telefono (HTML+CSS+JS)
+  icon_png.h                      icona dell'app per la schermata Home dell'iPhone
 old/                              versioni precedenti (archivio)
+  RZTools_v25_5/                  risultato finale solo in mm
   RZTools_v25_4/                  DX registrata dopo 1 s fermo, rosso/verde entro 0.5 mm
   RZTools_v25_3/                  SX come riferimento, confronto DX live
   RZTools_v25_1/                  etichette Avanti/back nella pagina R, zero DX in tempo reale
@@ -352,7 +368,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v25.5** | Risultato finale solo in mm (tolti i gradi sotto i valori SX, DX e differenza) |
+| **v26** | App per telefono via WiFi: voce "WiFi app" nel menu (rete RZTools), pagina web in stile RZ Ballast con schermata in corso e comandi adatti al telefono (R da tastierino, pulsanti grandi) |
+| v25.5 | Risultato finale solo in mm (tolti i gradi sotto i valori SX, DX e differenza) |
 | v25.4 | Confronto DX: valore DX registrato solo dopo 1 s fermo oltre lo zero (bip), rosso finché non coincide con la SX entro ±0.5 mm, poi verde; tolleranza in mm (0.5) anche per risultato e verdetto sonoro |
 | v25.3 | SX = riferimento (registrazione automatica come v25.1, back dalla schermata DX ripete la SX); DX = confronto live con lo scarto da Max/min SX (verde/rosso), senza pulsanti durante la regolazione, un solo OK; risultato con differenza di zero sempre in basso (fuori tolleranza da 1 mm). La v25.2 è stata scartata |
 | v25.1 | Pagina R: etichette "Avanti (tieni)" (freccia DX) e "back / tieni" verticale (freccia BLU), comandi +1/−1 a destra del numero; allarme zero DX con differenza in tempo reale per regolare la superficie e possibilità di continuare comunque |
