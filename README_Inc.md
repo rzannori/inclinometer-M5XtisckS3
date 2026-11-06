@@ -9,9 +9,9 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Versione completa più recente: **`incidenzimetro_m5_rz_v23.ino`** (documentata qui sotto).
 
-> **v24.1 — versione di sviluppo solo Goniometro** (`incidenzimetro_m5_rz_v24_1.ino`).
+> **v24.2 — versione di sviluppo solo Goniometro** (`incidenzimetro_m5_rz_v24_2.ino`).
 > Confronto Escursioni e Log volo sono temporaneamente rimossi e verranno reintegrati.
-> Non richiede i file `dati_test_nmea*.h` né la libreria SD. Vedi [Goniometro v24 / v24.1](#goniometro-v24--v241).
+> Non richiede i file `dati_test_nmea*.h` né la libreria SD. Vedi [Goniometro v24.x](#goniometro-v24x).
 
 ---
 
@@ -156,18 +156,18 @@ Misura l'inclinazione in tempo reale. Visualizza **mm in grande** (valore princi
 
 > Nota: la pagina comandi del Goniometro mostra "tieni DX = imposta dist.", ma nella v23 questa funzione non è implementata nella schermata live. Per cambiare R si torna al menu e si rientra nel Goniometro.
 
-### Goniometro v24 / v24.1
+### Goniometro v24.x
 
 Flusso:
 ```
-LOGO → COMANDI → IMPOSTA R → MONTA (premi DX) → TARA IN CORSO → LIVE
-                    ↑                                           │
-                    └──────────────── BLU ──────────────────────┤
-                                 TARA IN CORSO ←── DX ──────────┘
+LOGO → IMPOSTA R → MONTA (Avvia Tara = DX) → TARA IN CORSO → LIVE
+          ↑                                                 │
+          └──────────────────── BLU (back) ─────────────────┤
+                         TARA IN CORSO ←── DX ──────────────┘
 ```
 
 1. **Imposta R** con lo stick in mano (DX +1 / 2 click +10, BLU −1 / 2 click −10, **tieni DX o BLU** = conferma)
-2. **Monta** lo stick sulla superficie al neutro e premi **DX**
+2. **Monta** lo stick sulla superficie al neutro e premi **Avvia Tara** (tasto DX)
 3. **Tara stabilizzata**: togli il dito; lo stick attende di restare fermo (oscillazione < 0.15° per 1 s, barra di avanzamento), poi esegue la tara su 20 campioni, suona due note ascendenti e passa da solo alla misura. Se non si stabilizza entro 8 s emette un bip basso e riprova
 4. **Live**: mm grande + gradi piccoli, audio crescente. **DX** = rifai la tara (stessa logica), **BLU** = torna a impostare R
 
@@ -180,6 +180,8 @@ LOGO → COMANDI → IMPOSTA R → MONTA (premi DX) → TARA IN CORSO → LIVE
 **Frecce dei tasti (v24.1):** in ogni schermata, tranne il logo, due frecce indicano dove si trovano i tasti fisici:
 - **DX**: in alto al centro, punta verso l'alto, dello stesso colore della scritta che spiega il tasto DX in quella schermata
 - **BLU**: a destra, centrata in verticale, punta verso destra, blu come la scritta del tasto BLU
+
+**v24.2:** dopo il logo si va direttamente a **Imposta R** (la pagina comandi è stata tolta). Nella schermata di montaggio la freccia DX è etichettata **"Avvia Tara"**; accanto alla freccia BLU compare **"back"** in verticale nelle schermate in cui BLU torna indietro (montaggio, tara in corso, misura).
 
 Parametri regolabili in testa allo sketch: `STAB_TOL_DEG` (0.15°), `STAB_MS` (1000 ms), `TARA_TIMEOUT_MS` (8000 ms), `TARA_SAMPLES` (20).
 
@@ -277,7 +279,8 @@ return -atan2f(ay, az);  // verso opposto
 
 | File | Descrizione |
 |---|---|
-| `incidenzimetro_m5_rz_v24_1.ino` | Versione di sviluppo corrente: v24 + frecce che indicano i tasti |
+| `incidenzimetro_m5_rz_v24_2.ino` | Versione di sviluppo corrente: v24.1 + "Avvia Tara", "back", R subito dopo il logo |
+| `incidenzimetro_m5_rz_v24_1.ino` | v24 + frecce che indicano i tasti |
 | `incidenzimetro_m5_rz_v24.ino` | Solo Goniometro con tara stabilizzata |
 | `incidenzimetro_m5_rz_v23.ino` | Versione completa (tre strumenti) |
 | `dati_test_nmea.h` | Dati di test reali per il Log volo (richiesto dalla v23) |
@@ -304,7 +307,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v24.1** | Frecce che indicano la posizione dei tasti: DX in alto al centro (colore della scritta DX), BLU a destra al centro (blu); titoli abbassati per far posto alla freccia DX |
+| **v24.2** | Dopo il logo direttamente a Imposta R (tolta la pagina comandi); titolo "Imposta Distanza cerniera bordo di uscita (mm)"; montaggio: etichetta "Avvia Tara" sotto la freccia DX, istruzioni uniformi "Poi premi Avvia Tara"; scritta "back" verticale accanto alla freccia BLU; valori della misura spostati leggermente a sinistra |
+| v24.1 | Frecce che indicano la posizione dei tasti: DX in alto al centro (colore della scritta DX), BLU a destra al centro (blu); titoli abbassati per far posto alla freccia DX |
 | v24 | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU |
 | v23 | tre strumenti (Confronto Escursioni, Goniometro, Log volo) |
 | v22 | Strumenti rinominati (Incidenzimetro → Confronto Escursioni, Inclinometro → Goniometro); pagina "funzione tasti" anche per il Goniometro; testi delle pagine R/tara aggiornati; nel Log volo in alto a destra il tempo di riproduzione trascorso al posto della sorgente dati |
