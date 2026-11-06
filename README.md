@@ -9,7 +9,7 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v26.1 — RZTools, versione di sviluppo corrente** (`RZTools_v26_1/`: `RZTools_v26_1.ino` + `web_app.h` + `icon_png.h`).
+> **v26.2 — RZTools, versione di sviluppo corrente** (`RZTools_v26_2/`: `RZTools_v26_2.ino` + `web_app.h` + `icon_png.h`).
 > Novità: **app per telefono via WiFi** (vedi [App per telefono](#app-per-telefono-v26)).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
@@ -39,7 +39,9 @@ Lo stick può creare una propria rete WiFi e servire una pagina web che fa da **
 
 Il telefono mostra la schermata in corso con comandi adatti: R scritta col tastierino, con − / + o con lo **slider** (5–300 mm), pulsanti grandi (Avvia Tara, Fine, Risultato…), confronto DX con valori rossi/verdi, tabella dei risultati. Toccando il logo in alto si torna al menu (con conferma).
 
-**Setup** (dalla pagina del menu sul telefono, come in RZ Ballast): colori dell'app — sfondo (chiaro, sabbia, scuro, nero), colore principale e colore della barra, salvati sul telefono — più suono dello stick on/off (salvato sullo stick), batteria, R e versione. Pulsanti «?» di aiuto. Se la connessione cade compare un avviso con le istruzioni.
+**Setup** (dalla pagina del menu sul telefono, come in RZ Ballast): colori dell'app — sfondo (chiaro, sabbia, scuro, nero), colore principale e colore della barra, salvati sul telefono — più suono dello stick on/off (salvato sullo stick), batteria, R e versione. Pulsanti «?» di aiuto.
+
+**Lingue e guida (v26.2):** l'app è in **italiano, inglese e francese** (pulsanti IT/EN/FR nella pagina del menu o nel Setup; scelta salvata sul telefono, all'inizio viene proposta la lingua del telefono; lo schermo dello stick resta in italiano). La **Guida all'uso** (dal menu e dal Setup) spiega hardware necessario, collegamento del telefono, tasti, R, Goniometro, Inclinometro e consigli. Se la connessione cade compare un avviso con le istruzioni.
 
 Note: il WiFi aumenta il consumo (autonomia più breve); mentre è collegato allo stick l'iPhone non usa quella rete per internet. Rete e password si cambiano in testa allo sketch (`WIFI_SSID`, `WIFI_PASS`).
 
@@ -331,11 +333,12 @@ Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come ric
 
 ```
 README.md
-RZTools_v26_1/                    versione corrente
-  RZTools_v26_1.ino               programma: menu RZTools con Goniometro, Inclinometro e WiFi app
+RZTools_v26_2/                    versione corrente
+  RZTools_v26_2.ino               programma: menu RZTools con Goniometro, Inclinometro e WiFi app
   web_app.h                       pagina web dell'app per telefono (HTML+CSS+JS)
   icon_png.h                      icona dell'app per la schermata Home dell'iPhone
 old/                              versioni precedenti (archivio)
+  RZTools_v26_1/                  app: slider R e Setup colori
   RZTools_v26/                    prima versione con app per telefono
   RZTools_v25_5/                  risultato finale solo in mm
   RZTools_v25_4/                  DX registrata dopo 1 s fermo, rosso/verde entro 0.5 mm
@@ -371,7 +374,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v26.1** | App: slider per R; pagina Setup come RZ Ballast (colori di sfondo, principale e barra; suono dello stick on/off; info) e aiuti «?» |
+| **v26.2** | App in tre lingue (IT/EN/FR) e Guida all'uso con l'hardware necessario |
+| v26.1 | App: slider per R; pagina Setup come RZ Ballast (colori di sfondo, principale e barra; suono dello stick on/off; info) e aiuti «?» |
 | v26 | App per telefono via WiFi: voce "WiFi app" nel menu (rete RZTools), pagina web in stile RZ Ballast con schermata in corso e comandi adatti al telefono (R da tastierino, pulsanti grandi) |
 | v25.5 | Risultato finale solo in mm (tolti i gradi sotto i valori SX, DX e differenza) |
 | v25.4 | Confronto DX: valore DX registrato solo dopo 1 s fermo oltre lo zero (bip), rosso finché non coincide con la SX entro ±0.5 mm, poi verde; tolleranza in mm (0.5) anche per risultato e verdetto sonoro |
