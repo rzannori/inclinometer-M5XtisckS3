@@ -9,7 +9,7 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v25.1 — RZTools, versione di sviluppo corrente** (`RZTools_v25_1/RZTools_v25_1.ino`).
+> **v25.2 — RZTools, versione di sviluppo corrente** (`RZTools_v25_2/RZTools_v25_2.ino`).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
 > Vedi [RZTools v25.x](#rztools-v25x).
@@ -31,21 +31,20 @@ LOGO → MENU ─┬─ Goniometro  : IMPOSTA R → MONTA → TARA → LIVE
 ### Inclinometro (confronto escursioni)
 
 1. **Imposta R**, poi **posiziona lo stick sulla superficie SX al neutro** e premi **Avvia Tara** (tara stabilizzata come nel Goniometro)
-2. **Registrazione SX**: muovi la superficie a fondo corsa in su e in giù. A sinistra la misura continua (mm grande, gradi piccoli); a destra, separati da una linea verticale, **Max<sub>S</sub>** (in alto) e **min<sub>S</sub>** (in basso) in mm con i gradi più piccoli sotto
-3. **Chiusura automatica**: quando sia Max sia min superano 1 mm parte il conteggio; ogni nuovo Max/min che supera il precedente di almeno 0.5 mm lo fa ripartire. Dopo **2 s senza variazioni** la registrazione si chiude (in basso a sinistra: "fine tra x.x s"). **DX ("Fine")** chiude a mano in qualsiasi momento (utile per superfici che si muovono in una sola direzione, es. flap)
-4. **Sposta lo stick sulla superficie DX al neutro** e premi **Avvia**: lo stick attende di essere fermo e **verifica lo zero** (la tara resta quella della SX). Se lo zero DX differisce di oltre **0.5 mm** compare un **allarme** con la differenza in mm e gradi **in tempo reale** (dalla v25.1): rossa fuori tolleranza, verde "OK" quando rientra, così si può regolare la superficie. DX = **Continua** in qualsiasi momento (anche fuori tolleranza; come zero DX viene registrato il valore di quell'istante), BLU = riposiziona
-5. **Registrazione DX**: come la SX, con **Max<sub>D</sub>** e **min<sub>D</sub>**
-6. **Risultato**: tabella SX / DX / differenza per Max e min (mm, gradi piccoli sotto), differenze in verde se entro tolleranza (0.5°) e in rosso se fuori, differenza di zero DX, verdetto "SIMMETRIA OK" / "FUORI TOLLERANZA" con verdetto sonoro. DX = nuova misura, BLU = menu
+2. **Registrazione SX**: muovi la superficie a fondo corsa in su e in giù. A sinistra la misura continua (mm grande, gradi piccoli); a destra, separati da una linea verticale, **Max<sub>S</sub>** (in alto) e **min<sub>S</sub>** (in basso) in mm con i gradi più piccoli sotto. **DX ("OK")** chiude e va avanti; **BLU click = azzera** Max/min (per rimisurare dopo aver regolato un fine corsa: i valori possono così anche scendere); **BLU tenuto = back**
+3. **Sposta lo stick sulla superficie DX al neutro** e premi **Avvia**: lo stick attende di essere fermo e **verifica lo zero** (la tara resta quella della SX). Se lo zero DX differisce di oltre **0.5 mm** compare un **allarme** con la differenza in mm e gradi **in tempo reale**: rossa fuori tolleranza, verde "OK" quando rientra, così si può regolare la superficie. DX = **Continua** in qualsiasi momento (anche fuori tolleranza; come zero DX viene registrato il valore di quell'istante), BLU = riposiziona
+4. **Registrazione DX**: a sinistra la misura continua; a destra **Max e min di SX e DX affiancati** con la differenza in mm, **verde** entro tolleranza (0.5°) e **rossa** fuori, aggiornata mentre si regolano i fine corsa. Stessi tasti della SX: **OK** = risultato, **BLU click = azzera** Max/min DX, **BLU tenuto = back**. Si passa al risultato **solo con OK** (nessuna chiusura per inattività)
+5. **Risultato**: tabella SX / DX / differenza per Max e min (mm, gradi piccoli sotto), differenze **verdi** entro tolleranza (0.5°) e **rosse** fuori; verdetto sonoro di simmetria. In basso **sempre la differenza di zero DX/SX**: verde "OK" se inferiore a **1 mm**, rossa "FUORI TOLL." da 1 mm in su. DX = nuova misura, BLU = menu
 
 | Schermata | DX (freccia in alto) | BLU (freccia a destra) |
 |---|---|---|
 | Monta SX | Avvia Tara | back → Imposta R |
-| Registrazione | Fine | back → rimonta la superficie |
+| Registrazione SX / DX | OK (avanti) | click = azzera Max/min, tieni = back |
 | Monta DX | Avvia (verifica zero) | back → ricomincia dalla SX |
 | Allarme zero | Continua | back → riposiziona DX |
 | Risultato | Nuova misura | menu |
 
-Parametri in testa allo sketch: `ARM_MM` (1.0), `VAR_MM` (0.5), `NOVAR_MS` (2000), `ZERO_TOL_MM` (0.5), `SYM_TOL_DEG` (0.5).
+Parametri in testa allo sketch: `VAR_MM` (0.5, bip quando Max/min crescono), `ZERO_TOL_MM` (0.5, allarme zero DX), `ZERO_FINAL_MM` (1.0, zero fuori tolleranza nel risultato), `SYM_TOL_DEG` (0.5).
 
 ---
 
@@ -314,9 +313,10 @@ Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come ric
 
 ```
 README.md
-RZTools_v25_1/
-  RZTools_v25_1.ino               versione corrente: menu RZTools con Goniometro e Inclinometro
+RZTools_v25_2/
+  RZTools_v25_2.ino               versione corrente: menu RZTools con Goniometro e Inclinometro
 old/                              versioni precedenti (archivio)
+  RZTools_v25_1/                  etichette Avanti/back nella pagina R, zero DX in tempo reale
   RZTools_v25/                    prima versione RZTools (menu + Inclinometro riscritto)
   incidenzimetro_m5_rz_v24_2/     solo Goniometro: "Avvia Tara", "back", R subito dopo il logo
   incidenzimetro_m5_rz_v24_1/     v24 + frecce che indicano i tasti
@@ -347,7 +347,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v25.1** | Pagina R: etichette "Avanti (tieni)" (freccia DX) e "back / tieni" verticale (freccia BLU), comandi +1/−1 a destra del numero; allarme zero DX con differenza in tempo reale per regolare la superficie e possibilità di continuare comunque |
+| **v25.2** | Inclinometro: registrazione SX/DX chiusa solo con OK (niente inattività), BLU click = azzera Max/min, BLU tenuto = back; sulla DX confronto live Max/min SX \| DX con differenza verde/rossa; risultato con differenza di zero sempre in basso (fuori tolleranza da 1 mm) |
+| v25.1 | Pagina R: etichette "Avanti (tieni)" (freccia DX) e "back / tieni" verticale (freccia BLU), comandi +1/−1 a destra del numero; allarme zero DX con differenza in tempo reale per regolare la superficie e possibilità di continuare comunque |
 | v25 | RZTools: menu con Goniometro e Inclinometro; Inclinometro (confronto escursioni) riscritto: tara unica sulla SX, registrazione automatica Max/min con chiusura dopo 2 s senza variazioni, verifica zero DX con allarme, riepilogo con verdetto; R unica per entrambi; tieni BLU in Imposta R = menu |
 | v24.2 | Dopo il logo direttamente a Imposta R (tolta la pagina comandi); titolo "Imposta Distanza cerniera bordo di uscita (mm)"; montaggio: etichetta "Avvia Tara" sotto la freccia DX, istruzioni uniformi "Poi premi Avvia Tara"; scritta "back" verticale accanto alla freccia BLU; valori della misura spostati leggermente a sinistra |
 | v24.1 | Frecce che indicano la posizione dei tasti: DX in alto al centro (colore della scritta DX), BLU a destra al centro (blu); titoli abbassati per far posto alla freccia DX |
