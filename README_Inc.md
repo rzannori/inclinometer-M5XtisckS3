@@ -297,7 +297,7 @@ return -atan2f(ay, az);  // verso opposto
 
 | Versione | Novità |
 |---|---|
-| **v24** | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU |
+| **v24** | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU; grafica uniforme (testo bianco allineato a sinistra, sfondo blu solo nella pagina R) con frecce che indicano i tasti (▶ DX, ▲ BLU) |
 | v23 | tre strumenti (Confronto Escursioni, Goniometro, Log volo) |
 | v22 | Strumenti rinominati (Incidenzimetro → Confronto Escursioni, Inclinometro → Goniometro); pagina "funzione tasti" anche per il Goniometro; testi delle pagine R/tara aggiornati; nel Log volo in alto a destra il tempo di riproduzione trascorso al posto della sorgente dati |
 | v21 | Log volo (GPS/vario): lettura NMEA `$SMGPS`/`$SMGPS2` da dati di test o SD, grafico scorrevole di vario/quota/velocità |
