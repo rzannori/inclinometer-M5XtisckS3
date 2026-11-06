@@ -7,9 +7,9 @@ Tre applicazioni selezionabili dal menu iniziale:
 2. **Goniometro** — inclinazione live in mm e gradi, con feedback audio
 3. **Log volo (GPS)** — grafico scorrevole di vario, quota o velocità letti da un log NMEA
 
-Versione completa più recente: **`incidenzimetro_m5_rz_v23.ino`** (documentata qui sotto).
+Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v25 — RZTools, versione di sviluppo corrente** (`RZTools_v25.ino`, cartella `RZTools_v25`).
+> **v25 — RZTools, versione di sviluppo corrente** (`RZTools_v25/RZTools_v25.ino`).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
 > Vedi [RZTools v25](#rztools-v25).
@@ -99,9 +99,8 @@ Entrambi i file sono inclusi nel repository e **sono necessari per compilare**.
 
 L'Arduino IDE richiede che la cartella dello sketch abbia **lo stesso nome** del file `.ino` e che i `.h` stiano **nella stessa cartella**:
 
-1. crea una cartella chiamata esattamente `incidenzimetro_m5_rz_v23`
-2. mettici dentro `incidenzimetro_m5_rz_v23.ino` e i due file `.h`, tutti allo stesso livello
-3. apri il `.ino` dall'IDE: i due `.h` compaiono come schede aggiuntive in alto, segno che sono stati riconosciuti
+Nel repository la cartella `old/incidenzimetro_m5_rz_v23/` è già organizzata così: basta copiarla e
+aprire il `.ino` dall'IDE: i due `.h` compaiono come schede aggiuntive in alto, segno che sono stati riconosciuti
 
 ---
 
@@ -309,21 +308,26 @@ return -atan2f(ay, az);  // verso opposto
 
 ---
 
-## File inclusi
+## Struttura del repository
 
-| File | Descrizione |
-|---|---|
-| `RZTools_v25.ino` | **Versione di sviluppo corrente**: menu RZTools con Goniometro e Inclinometro |
-| `incidenzimetro_m5_rz_v24_2.ino` | Solo Goniometro: v24.1 + "Avvia Tara", "back", R subito dopo il logo |
-| `incidenzimetro_m5_rz_v24_1.ino` | v24 + frecce che indicano i tasti |
-| `incidenzimetro_m5_rz_v24.ino` | Solo Goniometro con tara stabilizzata |
-| `incidenzimetro_m5_rz_v23.ino` | Versione completa (tre strumenti) |
-| `dati_test_nmea.h` | Dati di test reali per il Log volo (richiesto dalla v23) |
-| `dati_test_nmea_sintetici.h` | Dati di test sintetici per il Log volo (richiesto dalla v23) |
-| `incidenzimetro_m5_rz_v20.ino` | Versione precedente (due strumenti: Incidenzimetro e Inclinometro) |
-| `incidenzimetro_m5_rz_v13.ino` | Versione storica (solo incidenzimetro) |
-| `README_Inc.md` | Questo documento |
+Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come richiesto dall'Arduino IDE: basta copiare la cartella e aprire il `.ino`.
 
+```
+README.md
+RZTools_v25/
+  RZTools_v25.ino                 versione corrente: menu RZTools con Goniometro e Inclinometro
+old/                              versioni precedenti (archivio)
+  incidenzimetro_m5_rz_v24_2/     solo Goniometro: "Avvia Tara", "back", R subito dopo il logo
+  incidenzimetro_m5_rz_v24_1/     v24 + frecce che indicano i tasti
+  incidenzimetro_m5_rz_v24/       solo Goniometro con tara stabilizzata
+  incidenzimetro_m5_rz_v23/       tre strumenti (Confronto Escursioni, Goniometro, Log volo)
+    dati_test_nmea.h              dati di test reali per il Log volo (richiesti dalla v23)
+    dati_test_nmea_sintetici.h    dati di test sintetici per il Log volo (richiesti dalla v23)
+  incidenzimetro_m5_rz_v20/       due strumenti (Incidenzimetro, Inclinometro)
+  incidenzimetro_m5_rz_v13/       versione storica (solo incidenzimetro)
+```
+
+Quando esce una nuova versione, la precedente viene spostata in `old/`.
 
 ---
 
