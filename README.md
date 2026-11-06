@@ -9,7 +9,7 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v26.2 — RZTools, versione di sviluppo corrente** (`RZTools_v26_2/`: `RZTools_v26_2.ino` + `web_app.h` + `icon_png.h`).
+> **v26.3 — RZTools, versione di sviluppo corrente** (`RZTools_v26_3/`: `RZTools_v26_3.ino` + `web_app.h` + `icon_png.h`).
 > Novità: **app per telefono via WiFi** (vedi [App per telefono](#app-per-telefono-v26)).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
@@ -41,7 +41,19 @@ Il telefono mostra la schermata in corso con comandi adatti: R scritta col tasti
 
 **Setup** (dalla pagina del menu sul telefono, come in RZ Ballast): colori dell'app — sfondo (chiaro, sabbia, scuro, nero), colore principale e colore della barra, salvati sul telefono — più suono dello stick on/off (salvato sullo stick), batteria, R e versione. Pulsanti «?» di aiuto.
 
-**Lingue e guida (v26.2):** l'app è in **italiano, inglese e francese** (pulsanti IT/EN/FR nella pagina del menu o nel Setup; scelta salvata sul telefono, all'inizio viene proposta la lingua del telefono; lo schermo dello stick resta in italiano). La **Guida all'uso** (dal menu e dal Setup) spiega hardware necessario, collegamento del telefono, tasti, R, Goniometro, Inclinometro e consigli. Se la connessione cade compare un avviso con le istruzioni.
+**Lingue e guida (v26.2):** l'app è in **italiano, inglese e francese** (pulsanti IT/EN/FR nella pagina del menu o nel Setup; scelta salvata sul telefono, all'inizio viene proposta la lingua del telefono; lo schermo dello stick resta in italiano). La **Guida all'uso** (dal menu e dal Setup) spiega hardware necessario, collegamento del telefono, tasti, R, Goniometro, Inclinometro, parametri e consigli.
+
+**Parametri di misura (v26.3):** in Setup → *Parametri di misura* si impostano tempi e tolleranze, **salvati sullo stick** (valgono anche senza telefono, con limiti min/max e «Ripristina valori predefiniti»):
+
+| Gruppo | Parametro | Predefinito |
+|---|---|---|
+| Tara | tempo di fermo / tolleranza di fermo | 1 s / 0.15° |
+| Riferimento SX | chiusura dopo nessuna variazione / variazione minima / soglia per avviare il conteggio | 2 s / 0.5 mm / 1 mm |
+| Confronto DX | tempo di fermo per registrare / tolleranza di fermo / soglia oltre lo zero / tolleranza SX-DX (rosso/verde) | 1 s / 0.2 mm / 1 mm / 0.5 mm |
+| Zero | allarme zero DX / fuori tolleranza nel risultato | 0.5 mm / 1 mm |
+| Lettura | filtro / **inverti il verso** (Max ↔ min) | 0.90 / attivo |
+
+Dalla v26.3 il verso della lettura è **invertito** rispetto alle versioni precedenti (quello che era Max ora è min e viceversa); si può tornare al verso originale con l'interruttore «Inverti il verso». Se la connessione cade compare un avviso con le istruzioni.
 
 Note: il WiFi aumenta il consumo (autonomia più breve); mentre è collegato allo stick l'iPhone non usa quella rete per internet. Rete e password si cambiano in testa allo sketch (`WIFI_SSID`, `WIFI_PASS`).
 
@@ -333,11 +345,12 @@ Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come ric
 
 ```
 README.md
-RZTools_v26_2/                    versione corrente
-  RZTools_v26_2.ino               programma: menu RZTools con Goniometro, Inclinometro e WiFi app
+RZTools_v26_3/                    versione corrente
+  RZTools_v26_3.ino               programma: menu RZTools con Goniometro, Inclinometro e WiFi app
   web_app.h                       pagina web dell'app per telefono (HTML+CSS+JS)
   icon_png.h                      icona dell'app per la schermata Home dell'iPhone
 old/                              versioni precedenti (archivio)
+  RZTools_v26_2/                  app in tre lingue e guida
   RZTools_v26_1/                  app: slider R e Setup colori
   RZTools_v26/                    prima versione con app per telefono
   RZTools_v25_5/                  risultato finale solo in mm
@@ -374,7 +387,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v26.2** | App in tre lingue (IT/EN/FR) e Guida all'uso con l'hardware necessario |
+| **v26.3** | Parametri di misura impostabili dal Setup dell'app e salvati sullo stick; verso della lettura invertito (Max ↔ min) con interruttore; guida aggiornata |
+| v26.2 | App in tre lingue (IT/EN/FR) e Guida all'uso con l'hardware necessario |
 | v26.1 | App: slider per R; pagina Setup come RZ Ballast (colori di sfondo, principale e barra; suono dello stick on/off; info) e aiuti «?» |
 | v26 | App per telefono via WiFi: voce "WiFi app" nel menu (rete RZTools), pagina web in stile RZ Ballast con schermata in corso e comandi adatti al telefono (R da tastierino, pulsanti grandi) |
 | v25.5 | Risultato finale solo in mm (tolti i gradi sotto i valori SX, DX e differenza) |
