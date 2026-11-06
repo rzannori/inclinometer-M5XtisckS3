@@ -9,14 +9,14 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v25 — RZTools, versione di sviluppo corrente** (`RZTools_v25/RZTools_v25.ino`).
+> **v25.1 — RZTools, versione di sviluppo corrente** (`RZTools_v25_1/RZTools_v25_1.ino`).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
-> Vedi [RZTools v25](#rztools-v25).
+> Vedi [RZTools v25.x](#rztools-v25x).
 
 ---
 
-## RZTools v25
+## RZTools v25.x
 
 ```
 LOGO → MENU ─┬─ Goniometro  : IMPOSTA R → MONTA → TARA → LIVE
@@ -25,7 +25,7 @@ LOGO → MENU ─┬─ Goniometro  : IMPOSTA R → MONTA → TARA → LIVE
 ```
 
 - **Menu**: DX ("Cambia") scorre, BLU ("ok") conferma
-- **Imposta R** (unica per entrambi i programmi): DX +1 / 2 click +10, BLU −1 / 2 click −10, **tieni DX = conferma**, **tieni BLU = menu**
+- **Imposta R** (unica per entrambi i programmi): DX +1 / 2 click +10, BLU −1 / 2 click −10, **tieni DX = Avanti**, **tieni BLU = back (menu)**. Dalla v25.1 le due azioni "tieni" sono indicate dalle etichette delle frecce: "Avanti (tieni)" sotto la freccia DX e "back / tieni" in verticale accanto alla freccia BLU
 - **Goniometro**: identico alla v24.2 (vedi [Goniometro v24.x](#goniometro-v24x))
 
 ### Inclinometro (confronto escursioni)
@@ -33,7 +33,7 @@ LOGO → MENU ─┬─ Goniometro  : IMPOSTA R → MONTA → TARA → LIVE
 1. **Imposta R**, poi **posiziona lo stick sulla superficie SX al neutro** e premi **Avvia Tara** (tara stabilizzata come nel Goniometro)
 2. **Registrazione SX**: muovi la superficie a fondo corsa in su e in giù. A sinistra la misura continua (mm grande, gradi piccoli); a destra, separati da una linea verticale, **Max<sub>S</sub>** (in alto) e **min<sub>S</sub>** (in basso) in mm con i gradi più piccoli sotto
 3. **Chiusura automatica**: quando sia Max sia min superano 1 mm parte il conteggio; ogni nuovo Max/min che supera il precedente di almeno 0.5 mm lo fa ripartire. Dopo **2 s senza variazioni** la registrazione si chiude (in basso a sinistra: "fine tra x.x s"). **DX ("Fine")** chiude a mano in qualsiasi momento (utile per superfici che si muovono in una sola direzione, es. flap)
-4. **Sposta lo stick sulla superficie DX al neutro** e premi **Avvia**: lo stick attende di essere fermo e **verifica lo zero** (la tara resta quella della SX). Se lo zero DX differisce di oltre **0.5 mm** compare un **allarme** con la differenza in mm e gradi: DX = continua comunque, BLU = riposiziona
+4. **Sposta lo stick sulla superficie DX al neutro** e premi **Avvia**: lo stick attende di essere fermo e **verifica lo zero** (la tara resta quella della SX). Se lo zero DX differisce di oltre **0.5 mm** compare un **allarme** con la differenza in mm e gradi **in tempo reale** (dalla v25.1): rossa fuori tolleranza, verde "OK" quando rientra, così si può regolare la superficie. DX = **Continua** in qualsiasi momento (anche fuori tolleranza; come zero DX viene registrato il valore di quell'istante), BLU = riposiziona
 5. **Registrazione DX**: come la SX, con **Max<sub>D</sub>** e **min<sub>D</sub>**
 6. **Risultato**: tabella SX / DX / differenza per Max e min (mm, gradi piccoli sotto), differenze in verde se entro tolleranza (0.5°) e in rosso se fuori, differenza di zero DX, verdetto "SIMMETRIA OK" / "FUORI TOLLERANZA" con verdetto sonoro. DX = nuova misura, BLU = menu
 
@@ -314,9 +314,10 @@ Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come ric
 
 ```
 README.md
-RZTools_v25/
-  RZTools_v25.ino                 versione corrente: menu RZTools con Goniometro e Inclinometro
+RZTools_v25_1/
+  RZTools_v25_1.ino               versione corrente: menu RZTools con Goniometro e Inclinometro
 old/                              versioni precedenti (archivio)
+  RZTools_v25/                    prima versione RZTools (menu + Inclinometro riscritto)
   incidenzimetro_m5_rz_v24_2/     solo Goniometro: "Avvia Tara", "back", R subito dopo il logo
   incidenzimetro_m5_rz_v24_1/     v24 + frecce che indicano i tasti
   incidenzimetro_m5_rz_v24/       solo Goniometro con tara stabilizzata
@@ -346,7 +347,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v25** | RZTools: menu con Goniometro e Inclinometro; Inclinometro (confronto escursioni) riscritto: tara unica sulla SX, registrazione automatica Max/min con chiusura dopo 2 s senza variazioni, verifica zero DX con allarme, riepilogo con verdetto; R unica per entrambi; tieni BLU in Imposta R = menu |
+| **v25.1** | Pagina R: etichette "Avanti (tieni)" (freccia DX) e "back / tieni" verticale (freccia BLU), comandi +1/−1 a destra del numero; allarme zero DX con differenza in tempo reale per regolare la superficie e possibilità di continuare comunque |
+| v25 | RZTools: menu con Goniometro e Inclinometro; Inclinometro (confronto escursioni) riscritto: tara unica sulla SX, registrazione automatica Max/min con chiusura dopo 2 s senza variazioni, verifica zero DX con allarme, riepilogo con verdetto; R unica per entrambi; tieni BLU in Imposta R = menu |
 | v24.2 | Dopo il logo direttamente a Imposta R (tolta la pagina comandi); titolo "Imposta Distanza cerniera bordo di uscita (mm)"; montaggio: etichetta "Avvia Tara" sotto la freccia DX, istruzioni uniformi "Poi premi Avvia Tara"; scritta "back" verticale accanto alla freccia BLU; valori della misura spostati leggermente a sinistra |
 | v24.1 | Frecce che indicano la posizione dei tasti: DX in alto al centro (colore della scritta DX), BLU a destra al centro (blu); titoli abbassati per far posto alla freccia DX |
 | v24 | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU |
