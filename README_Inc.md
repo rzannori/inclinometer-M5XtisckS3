@@ -54,10 +54,10 @@ Lo sketch v23 include due header con i dati di test del Log volo:
 
 | File | Contenuto |
 |---|---|
-| `dati_test_nmea.h` | Estratto da un log reale (`TEST_NMEA_DATA`), per verificare il parsing |
-| `dati_test_nmea_sintetici.h` | Dati sintetici (`TEST_NMEA_DATA_SYNTH`): vario −10/+10 m/s, quota 0–400 m, velocità 0–150 km/h |
+| `dati_test_nmea.h` | Estratto da un log reale (`TEST_NMEA_DATA`, 117 campioni a 0.1 s), per verificare il parsing |
+| `dati_test_nmea_sintetici.h` | Dati sintetici (`TEST_NMEA_DATA_SYNTH`, 220 campioni): vario −10/+10 m/s, quota 0–400 m, velocità 0–150 km/h; profilo salita → termiche → planata/atterraggio |
 
-> ⚠️ **Questi due file non sono ancora presenti nel repository**: senza di essi lo sketch non compila.
+Entrambi i file sono inclusi nel repository e **sono necessari per compilare**.
 
 L'Arduino IDE richiede che la cartella dello sketch abbia **lo stesso nome** del file `.ino` e che i `.h` stiano **nella stessa cartella**:
 
@@ -247,11 +247,12 @@ return -atan2f(ay, az);  // verso opposto
 | File | Descrizione |
 |---|---|
 | `incidenzimetro_m5_rz_v23.ino` | Programma principale (**versione corrente**) |
+| `dati_test_nmea.h` | Dati di test reali per il Log volo (richiesto dalla v23) |
+| `dati_test_nmea_sintetici.h` | Dati di test sintetici per il Log volo (richiesto dalla v23) |
 | `incidenzimetro_m5_rz_v20.ino` | Versione precedente (due strumenti: Incidenzimetro e Inclinometro) |
 | `incidenzimetro_m5_rz_v13.ino` | Versione storica (solo incidenzimetro) |
 | `README_Inc.md` | Questo documento |
 
-Da aggiungere al repository: `dati_test_nmea.h` e `dati_test_nmea_sintetici.h` (necessari per compilare la v23).
 
 ---
 
