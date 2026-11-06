@@ -7,7 +7,11 @@ Tre applicazioni selezionabili dal menu iniziale:
 2. **Goniometro** — inclinazione live in mm e gradi, con feedback audio
 3. **Log volo (GPS)** — grafico scorrevole di vario, quota o velocità letti da un log NMEA
 
-Versione corrente: **`incidenzimetro_m5_rz_v23.ino`**
+Versione completa più recente: **`incidenzimetro_m5_rz_v23.ino`** (documentata qui sotto).
+
+> **v24 — versione di sviluppo solo Goniometro** (`incidenzimetro_m5_rz_v24.ino`).
+> Confronto Escursioni e Log volo sono temporaneamente rimossi e verranno reintegrati.
+> Non richiede i file `dati_test_nmea*.h` né la libreria SD. Vedi [Goniometro v24](#goniometro-v24).
 
 ---
 
@@ -152,6 +156,29 @@ Misura l'inclinazione in tempo reale. Visualizza **mm in grande** (valore princi
 
 > Nota: la pagina comandi del Goniometro mostra "tieni DX = imposta dist.", ma nella v23 questa funzione non è implementata nella schermata live. Per cambiare R si torna al menu e si rientra nel Goniometro.
 
+### Goniometro v24
+
+Flusso:
+```
+LOGO → COMANDI → IMPOSTA R → MONTA (premi DX) → TARA IN CORSO → LIVE
+                    ↑                                           │
+                    └──────────────── BLU ──────────────────────┤
+                                 TARA IN CORSO ←── DX ──────────┘
+```
+
+1. **Imposta R** con lo stick in mano (DX +1 / 2 click +10, BLU −1 / 2 click −10, **tieni DX o BLU** = conferma)
+2. **Monta** lo stick sulla superficie al neutro e premi **DX**
+3. **Tara stabilizzata**: togli il dito; lo stick attende di restare fermo (oscillazione < 0.15° per 1 s, barra di avanzamento), poi esegue la tara su 20 campioni, suona due note ascendenti e passa da solo alla misura. Se non si stabilizza entro 8 s emette un bip basso e riprova
+4. **Live**: mm grande + gradi piccoli, audio crescente. **DX** = rifai la tara (stessa logica), **BLU** = torna a impostare R
+
+| Schermata | click DX | click BLU |
+|---|---|---|
+| Monta | avvia la tara | torna a R |
+| Tara in corso | ricomincia l'attesa | annulla, torna a R |
+| Live | rifai la tara | imposta R |
+
+Parametri regolabili in testa allo sketch: `STAB_TOL_DEG` (0.15°), `STAB_MS` (1000 ms), `TARA_TIMEOUT_MS` (8000 ms), `TARA_SAMPLES` (20).
+
 ---
 
 ## Log volo (GPS)
@@ -246,7 +273,8 @@ return -atan2f(ay, az);  // verso opposto
 
 | File | Descrizione |
 |---|---|
-| `incidenzimetro_m5_rz_v23.ino` | Programma principale (**versione corrente**) |
+| `incidenzimetro_m5_rz_v24.ino` | Versione di sviluppo: solo Goniometro con tara stabilizzata |
+| `incidenzimetro_m5_rz_v23.ino` | Versione completa (tre strumenti) |
 | `dati_test_nmea.h` | Dati di test reali per il Log volo (richiesto dalla v23) |
 | `dati_test_nmea_sintetici.h` | Dati di test sintetici per il Log volo (richiesto dalla v23) |
 | `incidenzimetro_m5_rz_v20.ino` | Versione precedente (due strumenti: Incidenzimetro e Inclinometro) |
@@ -269,7 +297,8 @@ return -atan2f(ay, az);  // verso opposto
 
 | Versione | Novità |
 |---|---|
-| **v23** | Versione corrente: tre strumenti (Confronto Escursioni, Goniometro, Log volo) |
+| **v24** | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU |
+| v23 | tre strumenti (Confronto Escursioni, Goniometro, Log volo) |
 | v22 | Strumenti rinominati (Incidenzimetro → Confronto Escursioni, Inclinometro → Goniometro); pagina "funzione tasti" anche per il Goniometro; testi delle pagine R/tara aggiornati; nel Log volo in alto a destra il tempo di riproduzione trascorso al posto della sorgente dati |
 | v21 | Log volo (GPS/vario): lettura NMEA `$SMGPS`/`$SMGPS2` da dati di test o SD, grafico scorrevole di vario/quota/velocità |
 | v20 | Due strumenti (Incidenzimetro, Inclinometro) |
