@@ -9,7 +9,7 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Ultima versione con tre strumenti: **`old/incidenzimetro_m5_rz_v23/`** (documentata qui sotto).
 
-> **v25.4 — RZTools, versione di sviluppo corrente** (`RZTools_v25_4/RZTools_v25_4.ino`).
+> **v25.5 — RZTools, versione di sviluppo corrente** (`RZTools_v25_5/RZTools_v25_5.ino`).
 > Menu con due sottoprogrammi: **Goniometro** (come v24.2) e **Inclinometro** (confronto escursioni riscritto).
 > Il Log volo è temporaneamente rimosso. Non richiede i file `dati_test_nmea*.h` né la libreria SD.
 > Vedi [RZTools v25.x](#rztools-v25x).
@@ -36,7 +36,7 @@ LOGO → MENU ─┬─ Goniometro  : IMPOSTA R → MONTA → TARA → LIVE
 2. **Registrazione del riferimento SX**: muovi la superficie a fondo corsa in su e in giù. A sinistra la misura continua (mm grande, gradi piccoli); a destra **Max<sub>S</sub>** e **min<sub>S</sub>** in mm con i gradi sotto. La registrazione si chiude da sola: il conteggio parte quando sia Max sia min superano 1 mm e dopo **2 s senza variazioni** (≥ 0.5 mm) si va avanti (conto alla rovescia a schermo). DX ("Fine") chiude a mano
 3. **Sposta lo stick sulla superficie DX al neutro** e premi **Avvia** (verifica dello zero, la tara resta quella della SX). **back** qui ripete la registrazione SX senza rifare la tara, se hai sbagliato. Se lo zero DX differisce di oltre **0.5 mm** compare l'**allarme** con la differenza in tempo reale (rossa/verde) per regolare la superficie; **Continua** va avanti comunque
 4. **Confronto DX**: a sinistra la lettura live grande; a destra i riferimenti **Max<sub>S</sub>** e **min<sub>S</sub>** e, sotto ciascuno, il **valore DX registrato**. Il valore DX viene registrato (con un bip) **ogni volta che la superficie resta ferma per più di 1 s oltre lo zero**, cioè portata a fondo corsa e tenuta lì; mentre si muove non si registra nulla. Il valore è **rosso** finché non coincide con quello della SX entro **±0.5 mm**, **verde** quando ci rientra; sotto, in piccolo, la differenza. Nessun pulsante da premere mentre regoli; un solo **OK** porta al risultato
-5. **Risultato**: tabella SX / DX / differenza per Max e min (mm, gradi piccoli sotto), differenze **verdi** entro ±0.5 mm e **rosse** fuori; verdetto sonoro di simmetria (stessa tolleranza). In basso **sempre la differenza di zero DX/SX**: verde "OK" sotto **1 mm**, rossa "FUORI TOLL." da 1 mm in su. DX = nuova misura, BLU = menu
+5. **Risultato**: tabella SX / DX / differenza per Max e min, **solo in mm**, differenze **verdi** entro ±0.5 mm e **rosse** fuori; verdetto sonoro di simmetria (stessa tolleranza). In basso **sempre la differenza di zero DX/SX**: verde "OK" sotto **1 mm**, rossa "FUORI TOLL." da 1 mm in su. DX = nuova misura, BLU = menu
 
 | Schermata | DX (freccia in alto) | BLU (freccia a destra) |
 |---|---|---|
@@ -316,9 +316,10 @@ Ogni sketch sta in una cartella con **lo stesso nome** del file `.ino`, come ric
 
 ```
 README.md
-RZTools_v25_4/
-  RZTools_v25_4.ino               versione corrente: menu RZTools con Goniometro e Inclinometro
+RZTools_v25_5/
+  RZTools_v25_5.ino               versione corrente: menu RZTools con Goniometro e Inclinometro
 old/                              versioni precedenti (archivio)
+  RZTools_v25_4/                  DX registrata dopo 1 s fermo, rosso/verde entro 0.5 mm
   RZTools_v25_3/                  SX come riferimento, confronto DX live
   RZTools_v25_1/                  etichette Avanti/back nella pagina R, zero DX in tempo reale
   RZTools_v25/                    prima versione RZTools (menu + Inclinometro riscritto)
@@ -351,7 +352,8 @@ Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v2
 
 | Versione | Novità |
 |---|---|
-| **v25.4** | Confronto DX: valore DX registrato solo dopo 1 s fermo oltre lo zero (bip), rosso finché non coincide con la SX entro ±0.5 mm, poi verde; tolleranza in mm (0.5) anche per risultato e verdetto sonoro |
+| **v25.5** | Risultato finale solo in mm (tolti i gradi sotto i valori SX, DX e differenza) |
+| v25.4 | Confronto DX: valore DX registrato solo dopo 1 s fermo oltre lo zero (bip), rosso finché non coincide con la SX entro ±0.5 mm, poi verde; tolleranza in mm (0.5) anche per risultato e verdetto sonoro |
 | v25.3 | SX = riferimento (registrazione automatica come v25.1, back dalla schermata DX ripete la SX); DX = confronto live con lo scarto da Max/min SX (verde/rosso), senza pulsanti durante la regolazione, un solo OK; risultato con differenza di zero sempre in basso (fuori tolleranza da 1 mm). La v25.2 è stata scartata |
 | v25.1 | Pagina R: etichette "Avanti (tieni)" (freccia DX) e "back / tieni" verticale (freccia BLU), comandi +1/−1 a destra del numero; allarme zero DX con differenza in tempo reale per regolare la superficie e possibilità di continuare comunque |
 | v25 | RZTools: menu con Goniometro e Inclinometro; Inclinometro (confronto escursioni) riscritto: tara unica sulla SX, registrazione automatica Max/min con chiusura dopo 2 s senza variazioni, verifica zero DX con allarme, riepilogo con verdetto; R unica per entrambi; tieni BLU in Imposta R = menu |
