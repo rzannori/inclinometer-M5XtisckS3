@@ -9,9 +9,9 @@ Tre applicazioni selezionabili dal menu iniziale:
 
 Versione completa più recente: **`incidenzimetro_m5_rz_v23.ino`** (documentata qui sotto).
 
-> **v24 — versione di sviluppo solo Goniometro** (`incidenzimetro_m5_rz_v24.ino`).
+> **v24.1 — versione di sviluppo solo Goniometro** (`incidenzimetro_m5_rz_v24_1.ino`).
 > Confronto Escursioni e Log volo sono temporaneamente rimossi e verranno reintegrati.
-> Non richiede i file `dati_test_nmea*.h` né la libreria SD. Vedi [Goniometro v24](#goniometro-v24).
+> Non richiede i file `dati_test_nmea*.h` né la libreria SD. Vedi [Goniometro v24 / v24.1](#goniometro-v24--v241).
 
 ---
 
@@ -156,7 +156,7 @@ Misura l'inclinazione in tempo reale. Visualizza **mm in grande** (valore princi
 
 > Nota: la pagina comandi del Goniometro mostra "tieni DX = imposta dist.", ma nella v23 questa funzione non è implementata nella schermata live. Per cambiare R si torna al menu e si rientra nel Goniometro.
 
-### Goniometro v24
+### Goniometro v24 / v24.1
 
 Flusso:
 ```
@@ -176,6 +176,10 @@ LOGO → COMANDI → IMPOSTA R → MONTA (premi DX) → TARA IN CORSO → LIVE
 | Monta | avvia la tara | torna a R |
 | Tara in corso | ricomincia l'attesa | annulla, torna a R |
 | Live | rifai la tara | imposta R |
+
+**Frecce dei tasti (v24.1):** in ogni schermata, tranne il logo, due frecce indicano dove si trovano i tasti fisici:
+- **DX**: in alto al centro, punta verso l'alto, dello stesso colore della scritta che spiega il tasto DX in quella schermata
+- **BLU**: a destra, centrata in verticale, punta verso destra, blu come la scritta del tasto BLU
 
 Parametri regolabili in testa allo sketch: `STAB_TOL_DEG` (0.15°), `STAB_MS` (1000 ms), `TARA_TIMEOUT_MS` (8000 ms), `TARA_SAMPLES` (20).
 
@@ -273,7 +277,8 @@ return -atan2f(ay, az);  // verso opposto
 
 | File | Descrizione |
 |---|---|
-| `incidenzimetro_m5_rz_v24.ino` | Versione di sviluppo: solo Goniometro con tara stabilizzata |
+| `incidenzimetro_m5_rz_v24_1.ino` | Versione di sviluppo corrente: v24 + frecce che indicano i tasti |
+| `incidenzimetro_m5_rz_v24.ino` | Solo Goniometro con tara stabilizzata |
 | `incidenzimetro_m5_rz_v23.ino` | Versione completa (tre strumenti) |
 | `dati_test_nmea.h` | Dati di test reali per il Log volo (richiesto dalla v23) |
 | `dati_test_nmea_sintetici.h` | Dati di test sintetici per il Log volo (richiesto dalla v23) |
@@ -295,9 +300,12 @@ return -atan2f(ay, az);  // verso opposto
 
 ## Cronologia versioni principali
 
+Numerazione: **decimale** (v24.1, v24.2…) per modifiche minori, **intero** (v25…) per modifiche importanti. Nel nome del file il punto diventa `_` (es. `v24_1`).
+
 | Versione | Novità |
 |---|---|
-| **v24** | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU; grafica uniforme (testo bianco allineato a sinistra, sfondo blu solo nella pagina R) con frecce che indicano i tasti (▶ DX, ▲ BLU) |
+| **v24.1** | Frecce che indicano la posizione dei tasti: DX in alto al centro (colore della scritta DX), BLU a destra al centro (blu); titoli abbassati per far posto alla freccia DX |
+| v24 | Solo Goniometro (altri strumenti rimossi temporaneamente); tara ritardata e stabilizzata con passaggio automatico alla misura; BLU in misura = imposta R; conferma R con DX o BLU |
 | v23 | tre strumenti (Confronto Escursioni, Goniometro, Log volo) |
 | v22 | Strumenti rinominati (Incidenzimetro → Confronto Escursioni, Inclinometro → Goniometro); pagina "funzione tasti" anche per il Goniometro; testi delle pagine R/tara aggiornati; nel Log volo in alto a destra il tempo di riproduzione trascorso al posto della sorgente dati |
 | v21 | Log volo (GPS/vario): lettura NMEA `$SMGPS`/`$SMGPS2` da dati di test o SD, grafico scorrevole di vario/quota/velocità |

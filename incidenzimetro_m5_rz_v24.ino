@@ -59,10 +59,7 @@ const uint8_t  SPK_VOL       = 128;
 const uint32_t BATT_CHECK_MS = 30000;
 const int      BATT_LOW_PCT  = 15;
 
-const uint16_t COL_TXT  = TFT_WHITE;      // colore unico di testi, numeri e frecce
-const uint16_t COL_BG   = TFT_BLACK;      // sfondo delle schermate
-const uint16_t COL_BG_R = TFT_NAVY;       // sfondo blu della schermata di impostazione R
-uint16_t       curBg    = COL_BG;         // sfondo della schermata in disegno
+const uint16_t COL_BLU  = 0x54BF;
 const uint32_t DBL_MS   = 300;          // finestra doppio click (ms)
 const uint32_t HOLD_MS  = 600;          // soglia "tenuto premuto" (ms)
 
@@ -190,56 +187,21 @@ bool updateTara() {
 }
 
 // ============================================================================
-//  GRAFICA: testo di un solo colore, tutto allineato a sinistra, frecce per i tasti
-//  Freccia a DESTRA  = tasto DX (frontale)
-//  Freccia in ALTO   = tasto BLU (sopra)
-// ============================================================================
-const int X0 = 6;                       // margine sinistro comune a tutte le scritte
-enum { K_DX = 1, K_BLU = 2, K_ANY = 3 };
-
-// prepara il canvas: sfondo unico e testo allineato a sinistra
-void beginScreen(uint16_t bg = COL_BG) {
-  curBg = bg;
-  canvas.fillScreen(curBg);
-  canvas.setTextColor(COL_TXT, curBg);
-  canvas.setTextDatum(top_left);
-  canvas.setFont(&fonts::Font2);
-}
-
-// scrive una riga di testo (Font2) allineata a sinistra
-void line(int y, const char* txt) {
-  canvas.setFont(&fonts::Font2);
-  canvas.setTextDatum(top_left);
-  canvas.setTextColor(COL_TXT, curBg);
-  canvas.drawString(txt, X0, y);
-}
-
-// freccia a destra (tasto DX) con l'angolo in alto a sinistra in (x, y)
-void arrowDx(int x, int y)  { canvas.fillTriangle(x, y + 3, x, y + 13, x + 9, y + 8, COL_TXT); }
-// freccia in alto (tasto BLU) con l'angolo in alto a sinistra in (x, y)
-void arrowBlu(int x, int y) { canvas.fillTriangle(x, y + 13, x + 10, y + 13, x + 5, y + 3, COL_TXT); }
-
-// riga con indicazione del tasto: freccia/e + testo (Font2, altezza 16 px)
-void keyLine(int y, int keys, const char* txt) {
-  int x = X0;
-  if (keys & K_DX)  { arrowDx(x, y);  x += 14; }
-  if (keys & K_BLU) { arrowBlu(x, y); x += 14; }
-  canvas.setFont(&fonts::Font2);
-  canvas.setTextDatum(top_left);
-  canvas.setTextColor(COL_TXT, curBg);
-  canvas.drawString(txt, x + 4, y);
-}
-
-// ============================================================================
 //  LOGO iniziale (RZ) con movimento lento fluttuante
 // ============================================================================
 void drawLogo() {
-  beginScreen();
+  canvas.fillScreen(TFT_BLACK);
   uint32_t t = millis();
   int x = (240 - LOGO_W) / 2 + (int)(4.0f * sinf(2.0f * (float)M_PI * t / 5000.0f));
-  int y = 34 + (int)(5.0f * sinf(2.0f * (float)M_PI * t / 3500.0f));
-  canvas.drawBitmap(x, y, LOGO_BMP, LOGO_W, LOGO_H, COL_TXT);
-  if ((t / 700) % 2 == 0) keyLine(116, K_ANY, "premi un tasto");
+  int y = 40 + (int)(5.0f * sinf(2.0f * (float)M_PI * t / 3500.0f));
+  canvas.drawBitmap(x, y, LOGO_BMP, LOGO_W, LOGO_H, TFT_WHITE);
+
+  if ((t / 700) % 2 == 0) {
+    canvas.setFont(&fonts::Font2);
+    canvas.setTextColor(COL_BLU, TFT_BLACK);
+    canvas.setTextDatum(bottom_center);
+    canvas.drawString("premi un tasto >", 120, 132);
+  }
   canvas.pushSprite(0, 0);
 }
 
@@ -247,14 +209,22 @@ void drawLogo() {
 //  HELP: funzione tasti
 // ============================================================================
 void drawHelp() {
-  beginScreen();
-  line(3,  "GONIOMETRO - COMANDI");
-  line(22, "1. imposta R (cerniera-bordo)");
-  line(38, "2. monta al neutro e premi DX");
-  line(56, "in misura:");
-  keyLine(72, K_DX,  "DX   rifai la tara");
-  keyLine(88, K_BLU, "BLU  imposta R");
-  keyLine(116, K_ANY, "premi un tasto per iniziare");
+  canvas.fillScreen(TFT_BLACK);
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_WHITE, TFT_BLACK);
+  canvas.setTextDatum(top_center);
+  canvas.drawString("GONIOMETRO - COMANDI", 120, 3);
+
+  canvas.setTextDatum(top_left);
+  canvas.setTextColor(TFT_ORANGE,    TFT_BLACK); canvas.drawString("1. imposta R (cerniera-bordo)", 6, 24);
+  canvas.setTextColor(TFT_GREEN,     TFT_BLACK); canvas.drawString("2. monta al neutro, click DX",  6, 42);
+  canvas.setTextColor(TFT_LIGHTGREY, TFT_BLACK); canvas.drawString("   togli il dito: tara auto",    6, 58);
+  canvas.setTextColor(TFT_GREEN,     TFT_BLACK); canvas.drawString("misura: DX = rifai tara",       6, 80);
+  canvas.setTextColor(COL_BLU,       TFT_BLACK); canvas.drawString("        BLU = imposta R",       6, 96);
+
+  canvas.setTextColor(TFT_YELLOW, TFT_BLACK);
+  canvas.setTextDatum(bottom_center);
+  canvas.drawString("premi un tasto per iniziare", 120, 133);
   canvas.pushSprite(0, 0);
 }
 
@@ -263,18 +233,24 @@ void drawHelp() {
 // ============================================================================
 void drawSetupR() {
   char buf[16];
-  beginScreen(COL_BG_R);
-  line(3,  "R = distanza cerniera -");
-  line(19, "bordo d'uscita (mm)");
+  canvas.fillScreen(TFT_NAVY);
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_WHITE, TFT_NAVY);
+  canvas.setTextDatum(top_center);
+  canvas.drawString("Distanza cerniera -", 120, 2);
+  canvas.drawString("bordo d'uscita (mm)", 120, 18);
 
   canvas.setFont(&fonts::Font7);
-  canvas.setTextDatum(top_left);
+  canvas.setTextColor(TFT_GREEN, TFT_NAVY);
+  canvas.setTextDatum(middle_center);
   snprintf(buf, sizeof(buf), "%d", (int)Ri_mm);
-  canvas.drawString(buf, X0, 37);
+  canvas.drawString(buf, 120, 62);
 
-  keyLine(86,  K_DX,  "DX   +1   (2 click +10)");
-  keyLine(102, K_BLU, "BLU  -1   (2 click -10)");
-  keyLine(118, K_ANY, "tieni premuto = conferma");
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextDatum(top_center);
+  canvas.setTextColor(TFT_ORANGE, TFT_NAVY);  canvas.drawString("DX: +1   (2 click = +10)", 120, 90);
+  canvas.setTextColor(COL_BLU,    TFT_NAVY);  canvas.drawString("BLU: -1  (2 click = -10)", 120, 106);
+  canvas.setTextColor(TFT_YELLOW, TFT_NAVY);  canvas.drawString("tieni un tasto = conferma", 120, 122);
   canvas.pushSprite(0, 0);
 }
 
@@ -282,15 +258,30 @@ void drawSetupR() {
 //  MOUNT: monta lo stick sulla superficie al neutro, poi click DX
 // ============================================================================
 void drawMount() {
-  char buf[24];
-  beginScreen();
-  line(3,  "TARA");
-  line(24, "Monta lo stick sulla");
-  line(41, "superficie al NEUTRO");
-  snprintf(buf, sizeof(buf), "R = %d mm", (int)Ri_mm);
-  line(62, buf);
-  keyLine(96,  K_DX,  "DX   avvia la tara");
-  keyLine(116, K_BLU, "BLU  imposta R");
+  char buf[16];
+  canvas.fillScreen(TFT_BLACK);
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_CYAN, TFT_BLACK);
+  canvas.setTextDatum(top_center);
+  canvas.drawString("TARA", 120, 3);
+
+  canvas.setTextColor(TFT_WHITE, TFT_BLACK);
+  canvas.drawString("Monta lo stick sulla", 120, 28);
+  canvas.drawString("superficie al NEUTRO", 120, 46);
+
+  canvas.setFont(&fonts::Font4);
+  canvas.setTextColor(TFT_GREEN, TFT_BLACK);
+  canvas.setTextDatum(middle_center);
+  canvas.drawString("poi premi DX", 120, 84);
+
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_DARKGREY, TFT_BLACK);
+  canvas.setTextDatum(bottom_left);
+  snprintf(buf, sizeof(buf), "R=%dmm", (int)Ri_mm);
+  canvas.drawString(buf, 4, 133);
+  canvas.setTextColor(COL_BLU, TFT_BLACK);
+  canvas.setTextDatum(bottom_right);
+  canvas.drawString("BLU = R", 236, 133);
   canvas.pushSprite(0, 0);
 }
 
@@ -298,22 +289,32 @@ void drawMount() {
 //  TARA_RUN: attesa della stabilita' con barra di avanzamento
 // ============================================================================
 void drawTaraRun() {
-  beginScreen();
-  line(3, "TARA IN CORSO");
+  canvas.fillScreen(TFT_BLACK);
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_CYAN, TFT_BLACK);
+  canvas.setTextDatum(top_center);
+  canvas.drawString("TARA IN CORSO", 120, 3);
 
   canvas.setFont(&fonts::Font4);
-  canvas.drawString("tieni fermo...", X0, 26);
+  canvas.setTextColor(TFT_YELLOW, TFT_BLACK);
+  canvas.setTextDatum(middle_center);
+  canvas.drawString("tieni fermo...", 120, 48);
 
   // barra: quanto manca alla tara (si svuota se lo stick si muove)
   uint32_t el = millis() - stableStart;
   float frac = (float)el / (float)STAB_MS;
   if (frac > 1.0f) frac = 1.0f;
-  const int bw = 228, bh = 16, by = 62;
-  canvas.drawRect(X0, by, bw, bh, COL_TXT);
-  canvas.fillRect(X0 + 2, by + 2, (int)((bw - 4) * frac), bh - 4, COL_TXT);
+  const int bx = 30, by = 76, bw = 180, bh = 16;
+  canvas.drawRect(bx, by, bw, bh, TFT_DARKGREY);
+  canvas.fillRect(bx + 2, by + 2, (int)((bw - 4) * frac), bh - 4, TFT_GREEN);
 
-  keyLine(96,  K_DX,  "DX   ricomincia");
-  keyLine(116, K_BLU, "BLU  annulla");
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_DARKGREY, TFT_BLACK);
+  canvas.setTextDatum(bottom_left);
+  canvas.drawString("DX = ricomincia", 4, 133);
+  canvas.setTextColor(COL_BLU, TFT_BLACK);
+  canvas.setTextDatum(bottom_right);
+  canvas.drawString("BLU = annulla", 236, 133);
   canvas.pushSprite(0, 0);
 }
 
@@ -321,32 +322,43 @@ void drawTaraRun() {
 //  LIVE: mm grande + gradi piccoli
 // ============================================================================
 void drawLive() {
-  char buf[24];
+  char buf[14];
   float deg = liveDeg();
   float mm  = throwMm(deg);
-  beginScreen();
+  canvas.fillScreen(TFT_BLACK);
 
-  snprintf(buf, sizeof(buf), "GONIOMETRO   R = %d mm", (int)Ri_mm);
-  line(3, buf);
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_CYAN, TFT_BLACK);
+  canvas.setTextDatum(top_center);
+  canvas.drawString("Goniometro - Misura", 120, 3);
 
   // mm GRANDE (valore principale)
   canvas.setFont(&fonts::Font7);
-  canvas.setTextDatum(top_left);
+  canvas.setTextColor(TFT_ORANGE, TFT_BLACK);
+  canvas.setTextDatum(middle_right);
   snprintf(buf, sizeof(buf), "%+.1f", mm);
-  canvas.drawString(buf, X0, 22);
-  int w = canvas.textWidth(buf);
+  canvas.drawString(buf, 200, 50);
   canvas.setFont(&fonts::Font2);
-  canvas.drawString("mm", X0 + w + 6, 54);
+  canvas.setTextDatum(middle_left);
+  canvas.drawString("mm", 204, 50);
 
   // gradi PICCOLI sotto
   canvas.setFont(&fonts::Font4);
+  canvas.setTextColor(TFT_DARKGREY, TFT_BLACK);
+  canvas.setTextDatum(middle_right);
   snprintf(buf, sizeof(buf), "%+.1f", deg);
-  canvas.drawString(buf, X0, 74);
-  w = canvas.textWidth(buf);
-  canvas.drawCircle(X0 + w + 5, 78, 2, COL_TXT);
+  canvas.drawString(buf, 185, 92);
+  canvas.drawCircle(192, 80, 2, TFT_DARKGREY);
 
-  keyLine(102, K_DX,  "DX   rifai la tara");
-  keyLine(118, K_BLU, "BLU  imposta R");
+  canvas.setFont(&fonts::Font2);
+  canvas.setTextColor(TFT_DARKGREY, TFT_BLACK);
+  canvas.setTextDatum(bottom_left);
+  snprintf(buf, sizeof(buf), "R=%dmm", (int)Ri_mm);
+  canvas.drawString(buf, 4, 133);
+  canvas.setTextColor(TFT_GREEN, TFT_BLACK);
+  canvas.setTextDatum(bottom_center); canvas.drawString("DX=tara", 120, 133);
+  canvas.setTextColor(COL_BLU, TFT_BLACK);
+  canvas.setTextDatum(bottom_right);  canvas.drawString("BLU=R", 236, 133);
   canvas.pushSprite(0, 0);
 }
 
